@@ -2,7 +2,7 @@ provider "aws" {
   region = "us-east-2"
 }
 
-#create vpc
+
 resource "aws_vpc" "vpc2122" {
   cidr_block                       = "${var.vpc_cidr}"
   instance_tenancy                 = "default"
@@ -66,4 +66,31 @@ resource "aws_nat_gateway" "gateway" {
   allocation_id = "${aws_eip.eip.id}"
   subnet_id     = "${aws_subnet.aws-subnet-internal.id}"
   depends_on    = ["aws_internet_gateway.gateway-2122"]
+}
+
+
+resource "aws_security_group" "sg2122" {
+  name   = "Security Group for VPC2122"
+  vpc_id = "${aws_vpc.vpc2122.id}"
+  dynamic "ingress" {
+    for_each = "${var.allows_ports}"
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name  = "SecurityGroup2122"
+    Owner = "Berbeha Olexandr"
+  }
 }
