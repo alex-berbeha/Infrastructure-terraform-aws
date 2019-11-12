@@ -25,19 +25,19 @@ resource "aws_internet_gateway" "IGW2130" {
 }
 
 resource "aws_subnet" "external_subnet" {
-  vpc_id            = aws_vpc.vpc2130.id
-  cidr_block        = "${var.vpc_cidr_external}"
-  availability_zone = "${var.aws_region}b"
+  vpc_id                  = aws_vpc.vpc2130.id
+  cidr_block              = "${var.vpc_cidr_external}"
+  availability_zone       = "${var.aws_region}b"
+  map_public_ip_on_launch = "true"
   tags = {
     Name = "external_subnet"
   }
 }
 
 resource "aws_subnet" "internal_subnet" {
-  vpc_id                  = aws_vpc.vpc2130.id
-  cidr_block              = "${var.vpc_cidr_internal}"
-  availability_zone       = "${var.aws_region}b"
-  map_public_ip_on_launch = "true"
+  vpc_id            = aws_vpc.vpc2130.id
+  cidr_block        = "${var.vpc_cidr_internal}"
+  availability_zone = "${var.aws_region}b"
   tags = {
     Name = "internal_subnet"
   }
